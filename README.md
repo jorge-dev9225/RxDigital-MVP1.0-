@@ -89,7 +89,7 @@ Este repositorio contiene la **versión MVP (v1.0)** del sistema, centrada en:
 
 ## 🧱 Tecnologías utilizadas
 
-- **Backend**: Laravel 12 (PHP 8.x)
+- **Backend**: Laravel 12 (PHP 8)
 - **Frontend**: Blade + Tailwind CSS
 - **Autenticación**: Laravel Breeze (login, registro, email verification, reset password)
 - **Base de datos**: MySQL
