@@ -1,59 +1,110 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# RxDigital – Recetas médicas digitales seguras
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+RxDigital es una aplicación web para médicos que permite **generar recetas médicas digitales en PDF**, firmadas, con QR de verificación y flujo sencillo para que el paciente complete sus datos de forma segura.
 
-## About Laravel
+Este repositorio contiene la **versión MVP (v1.0)** del sistema, centrada en:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Gestión básica de usuarios (médicos) con registro, login y verificación por email.
+- Generación de recetas (RP + Notas/Indicaciones).
+- Envío de link seguro al paciente para completar sus datos.
+- Generación de PDF con estilos personalizados y código QR de verificación.
+- Panel de control para que el médico gestione recetas.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+> ⚠️ **Importante:** Este proyecto está pensado como MVP. No debe usarse en producción sin una revisión legal/compliance respecto a la normativa sanitaria y de protección de datos vigente en tu país.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## ✨ Funcionalidades principales
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### 👨‍⚕️ Para el médico
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- Registro de cuenta y login seguro.
+- Verificación de email (enlace enviado al correo del médico).
+- Recuperación de contraseña vía email (flujo estándar de Laravel, estilizado).
+- Panel de control (dashboard) con:
+  - Listado de recetas.
+  - Estados: pendiente, enviada al paciente, completada por paciente, finalizada.
+  - Botón para **generar nueva receta**.
+  - Botones para:
+    - Enviar enlace al paciente.
+    - Generar/descargar PDF.
+    - Cancelar o eliminar recetas.
 
-## Laravel Sponsors
+- Datos de perfil de médico:
+  - Nombre completo.
+  - Género (para mostrar Dr./Dra.).
+  - Especialidad.
+  - Matrícula Nacional.
+  - Matrícula Provincial.
+  - Domicilio de consultorio.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 🧑‍🦰 Para el paciente
 
-### Premium Partners
+- Recibe un enlace único y seguro (con token público) para completar sus datos:
+  - Nombre y apellido.
+  - DNI.
+  - Fecha de nacimiento (con validaciones de rango).
+  - Obra social (opcional).
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+- Validaciones de formulario en servidor:
+  - Nombres/apellidos con mínimo de caracteres.
+  - DNI con rango de dígitos.
+  - Fecha de nacimiento coherente (no futura, no absurda).
 
-## Contributing
+### 📄 Recetas en PDF
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- Generación de PDF con:
+  - Encabezado con datos del médico:
+    - Dr./Dra. dinámico según género.
+    - Nombre del profesional.
+    - Especialidad.
+    - Matrículas (M.N., M.P.).
+  - Cuerpo:
+    - Copia 1 – Medicación (RP).
+    - Copia 2 – Indicaciones / Notas.
+  - Datos del paciente.
+  - Firma y sello del profesional alineados con el QR.
+  - QR de verificación que apunta a una vista pública de verificación.
+  - Estilos personalizados (colores, tipografía, layout).
 
-## Code of Conduct
+### 🔐 Seguridad y verificaciones
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- Autenticación y verificación de email para médicos.
+- Rutas de médico protegidas con `auth` + `verified`.
+- Control de acceso a recetas:
+  - Solo el médico propietario puede ver/generar/descargar PDFs.
+- Tokens públicos para pacientes y verificación:
+  - `public_token` único por receta.
+- Configurado para uso con **Gmail SMTP + App Password** (en `.env`).
 
-## Security Vulnerabilities
+### 📩 Notificaciones por email
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- **Verificación de email** al registrarse.
+- **Recuperación de contraseña** con vistas personalizadas.
+- **Notificación al médico** cuando un paciente completa el formulario:
+  - Asunto: “Nuevo formulario completado – RxDigital”.
+  - Email enviado a la dirección de correo con la que se registró el médico.
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 🧱 Tecnologías utilizadas
+
+- **Backend**: Laravel 12 (PHP 8.x)
+- **Frontend**: Blade + Tailwind CSS
+- **Autenticación**: Laravel Breeze (login, registro, email verification, reset password)
+- **Base de datos**: MySQL
+- **PDF**: `barryvdh/laravel-dompdf`
+- **QR Codes**: `simplesoftwareio/simple-qrcode`
+- **Mailing**: SMTP (Gmail con App Password)
+
+---
+
+## 🚀 Requisitos
+
+- PHP >= 8.2
+- Composer
+- Node.js + npm
+- MySQL / MariaDB (u otra BD compatible configurada en `.env`)
+- Cuenta de Gmail con **App Password** (no la contraseña normal).
+
+---
