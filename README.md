@@ -108,3 +108,9 @@ Este repositorio contiene la **versión MVP (v1.0)** del sistema, centrada en:
 - Cuenta de Gmail con **App Password** (no la contraseña normal).
 
 ---
+
+## 💼 ¿Para quién es RxDigital?
+
+- Médicos independientes que necesitan emitir recetas digitales con validez y registro.
+- Clínicas pequeñas que quieren digitalizar la emisión de recetas sin invertir en un sistema enorme.
+- Proyectos de telemedicina que necesitan un módulo de recetas PDF con verificación por QR.
