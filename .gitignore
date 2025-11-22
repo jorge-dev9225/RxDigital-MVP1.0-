@@ -1,0 +1,67 @@
+# =========================
+# Archivos de entorno / secretos
+# =========================
+.env
+.env.*
+!.env.example      # solo se versiona el ejemplo, sin credenciales reales
+auth.json
+
+# =========================
+# Logs y archivos temporales
+# =========================
+*.log
+.phpunit.result.cache
+/.phpunit.cache
+/storage/pail
+
+# =========================
+# Directorios de dependencias
+# =========================
+/vendor
+/node_modules
+
+# =========================
+# Builds de frontend
+# =========================
+/public/build
+/public/hot
+
+# =========================
+# Storage (archivos generados)
+# =========================
+/public/storage        # symlink de storage, se vuelve a crear con artisan
+
+/storage/*
+!/storage/app
+!/storage/app/public
+!/storage/framework
+!/storage/framework/cache
+!/storage/framework/sessions
+!/storage/framework/views
+!/storage/framework/testing
+!/storage/logs
+
+# Si guardás PDFs de recetas en un disco propio (recomendado):
+/storage/app/prescriptions/
+
+# =========================
+# Bases de datos / dumps
+# =========================
+*.sqlite
+*.sqlite3
+*.sql
+*.dump
+
+# =========================
+# Config de IDEs / SO
+# =========================
+.DS_Store
+Thumbs.db
+/.fleet
+/.idea
+/.nova
+/.vscode
+/.zed
+.phpactor.json
+Homestead.json
+Homestead.yaml
